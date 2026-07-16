@@ -19,7 +19,10 @@ const config: Config = {
       },
     },
     extend: {
-      fontFamily: {},
+      fontFamily: {
+        sans: ['var(--font-be-vietnam)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-barlow-condensed)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {},
       backgroundImage: {},
       boxShadow: {},
