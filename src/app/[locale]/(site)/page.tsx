@@ -9,7 +9,15 @@ export function generateStaticParams() {
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const acfData = await homepageService.getAcfData(locale)
+  const [acfData, newsData] = await Promise.all([
+    homepageService.getAcfData(locale),
+    homepageService.getNews(locale),
+  ])
 
-  return <HomepageModule data={acfData?.acf} />
+  return (
+    <HomepageModule
+      data={acfData?.acf}
+      news={newsData?.data}
+    />
+  )
 }

@@ -37,11 +37,18 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const sync = () => setEnabled(!media.matches)
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const isMobile = window.matchMedia('(max-width: 639px)')
+
+    const sync = () => setEnabled(!reduceMotion.matches && !isMobile.matches)
     sync()
-    media.addEventListener('change', sync)
-    return () => media.removeEventListener('change', sync)
+
+    reduceMotion.addEventListener('change', sync)
+    isMobile.addEventListener('change', sync)
+    return () => {
+      reduceMotion.removeEventListener('change', sync)
+      isMobile.removeEventListener('change', sync)
+    }
   }, [])
 
   if (!enabled) return children

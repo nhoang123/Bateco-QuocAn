@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use client'
 
 import { motion, useReducedMotion } from 'motion/react'
@@ -95,6 +96,16 @@ export default function Preloader() {
   const [phase, setPhase] = useState<Phase>('loading')
   const [progress, setProgress] = useState(0)
 
+  const shouldSkip =
+    Boolean(reduceMotion) ||
+    (typeof window !== 'undefined' &&
+      (document.documentElement.dataset.preloader === 'done' || hasSeenPreloader()))
+
+  // Derive skip → done during render (avoid sync setState in effect)
+  if (shouldSkip && phase !== 'done') {
+    setPhase('done')
+  }
+
   const statusIndex = useMemo(() => {
     if (progress < 28) return 0
     if (progress < 55) return 1
@@ -103,15 +114,12 @@ export default function Preloader() {
   }, [progress])
 
   useEffect(() => {
-    if (
-      document.documentElement.dataset.preloader === 'done' ||
-      hasSeenPreloader() ||
-      reduceMotion
-    ) {
+    if (phase === 'done') {
       markPreloaderSeen()
-      setPhase('done')
       return
     }
+
+    if (phase !== 'loading') return
 
     document.documentElement.dataset.preloader = 'active'
     document.body.setAttribute('data-scroll-locked', '')
@@ -142,7 +150,7 @@ export default function Preloader() {
       window.clearTimeout(leaveTimer)
       document.body.removeAttribute('data-scroll-locked')
     }
-  }, [reduceMotion])
+  }, [phase])
 
   useEffect(() => {
     if (phase !== 'leaving') return
@@ -208,11 +216,7 @@ export default function Preloader() {
       <motion.div
         aria-hidden
         className='pointer-events-none absolute inset-x-0 h-[20%] bg-gradient-to-b from-transparent via-brand-moss/25 to-transparent mix-blend-screen'
-        animate={
-          leaving
-            ? { opacity: 0 }
-            : { top: ['-20%', '110%'], opacity: [0, 1, 1, 0] }
-        }
+        animate={leaving ? { opacity: 0 } : { top: ['-20%', '110%'], opacity: [0, 1, 1, 0] }}
         transition={
           leaving
             ? { duration: 0.25 }
@@ -263,9 +267,9 @@ export default function Preloader() {
           transition={{ duration: 1.05, ease: EASE }}
         >
           <OrbitalRings progress={progress} />
-          <div className='relative size-[3.5rem] xsm:size-[2.9rem]'>
+          <div className='relative size-[3.5rem] xsm:size-[3.15rem]'>
             <Image
-              src='/images/logo.svg'
+              src='/images/logo.png'
               alt=''
               fill
               priority

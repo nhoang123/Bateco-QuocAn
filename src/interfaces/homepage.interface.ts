@@ -64,6 +64,23 @@ export interface IHomepagePartner {
   gallery: string[]
 }
 
+export interface IHomepageNews {
+  id: number
+  title: string
+  slug: string
+  published: string
+  link: string
+  thumbnail: { url: string }
+  taxonomies: {
+    categories_post: {
+      id: number
+      name: string
+      slug: string
+    }[]
+  }
+  post_excerpt: string
+}
+
 export interface IHomepage {
   banner: IHomepageBannerSlide[]
   about: IHomepageAbout
@@ -71,6 +88,7 @@ export interface IHomepage {
   areas_of_operation: IHomepageAreasOfOperation
   customers: IHomepageCustomers
   partner: IHomepagePartner
+  news: IHomepageNews[]
 }
 
 /** WordPress page response when fetching `?_fields=acf` */

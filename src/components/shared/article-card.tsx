@@ -58,10 +58,7 @@ export function ArticleCard({ article, className, variant = 'dark' }: ArticleCar
               )}
             />
             <div
-              className={cn(
-                'absolute inset-x-0 bottom-0 h-px',
-                isDark ? 'bg-brand' : 'bg-white',
-              )}
+              className={cn('absolute inset-x-0 bottom-0 h-px', isDark ? 'bg-brand' : 'bg-white')}
             />
           </div>
         </div>

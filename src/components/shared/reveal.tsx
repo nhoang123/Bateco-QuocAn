@@ -11,13 +11,7 @@ const emptySubscribe = () => () => {}
 
 type RevealTag = 'div' | 'li' | 'article' | 'header' | 'section' | 'span'
 
-export type RevealAnimation =
-  | 'rise'
-  | 'sink'
-  | 'drift-left'
-  | 'drift-right'
-  | 'soft-scale'
-  | 'veil'
+export type RevealAnimation = 'rise' | 'sink' | 'drift-left' | 'drift-right' | 'soft-scale' | 'veil'
 
 const ANIMATIONS: RevealAnimation[] = [
   'rise',

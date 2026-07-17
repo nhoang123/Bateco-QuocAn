@@ -6,7 +6,14 @@ import {
   type HTMLMotionProps,
   type MotionProps,
 } from 'motion/react'
-import { useEffect, useRef, useState, type ComponentType, type RefAttributes } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type ReactNode,
+  type RefAttributes,
+} from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -58,6 +65,53 @@ const DEFAULT_CHARACTER_SET = Object.freeze(
 ) as readonly string[]
 
 const getRandomInt = (max: number): number => Math.floor(Math.random() * max)
+
+function renderHyperTextCharacters(children: string, displayText: string[]): ReactNode[] {
+  const nodes: ReactNode[] = []
+  let charIndex = 0
+  let nodeKey = 0
+
+  for (const token of children.split(/(\s+)/)) {
+    if (!token) continue
+
+    if (/^\s+$/.test(token)) {
+      nodes.push(<span key={`s-${nodeKey++}`}>{token}</span>)
+      charIndex += token.length
+      continue
+    }
+
+    nodes.push(
+      <span
+        key={`w-${nodeKey++}`}
+        className='inline-block whitespace-nowrap'
+      >
+        {token.split('').map((_, offset) => {
+          const index = charIndex + offset
+          const letter = displayText[index] ?? children[index]
+          const finalLetter = children[index] ?? letter
+
+          return (
+            <span
+              key={index}
+              className='relative inline-block'
+            >
+              <span
+                className='invisible'
+                aria-hidden
+              >
+                {finalLetter}
+              </span>
+              <span className='absolute inset-0 flex justify-center'>{letter}</span>
+            </span>
+          )
+        })}
+      </span>,
+    )
+    charIndex += token.length
+  }
+
+  return nodes
+}
 
 export function HyperText({
   children,
@@ -172,28 +226,7 @@ export function HyperText({
       onMouseEnter={handleAnimationTrigger}
       {...props}
     >
-      {displayText.map((letter, index) => {
-        const finalLetter = children[index] ?? letter
-
-        if (finalLetter === ' ') {
-          return <span key={index}> </span>
-        }
-
-        return (
-          <span
-            key={index}
-            className='relative inline-block'
-          >
-            <span
-              className='invisible'
-              aria-hidden
-            >
-              {finalLetter}
-            </span>
-            <span className='absolute inset-0 flex justify-center'>{letter}</span>
-          </span>
-        )
-      })}
+      {renderHyperTextCharacters(children, displayText)}
     </MotionComponent>
   )
 }

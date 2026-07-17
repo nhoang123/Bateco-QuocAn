@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { useReducedMotion } from 'motion/react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
@@ -10,13 +10,12 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import type { IHomepageBannerSlide } from '@/interfaces/homepage.interface'
 import Container from '@/layouts/container'
 import { cn } from '@/lib/utils'
+import { HeroCopy } from '@/modules/home/banner/components/hero-copy'
+import { SlideIndicators } from '@/modules/home/banner/components/slide-indicators'
+import { AUTOPLAY_DELAY_MS, HERO_HEIGHT } from '@/modules/home/banner/lib/constants'
 
 import 'swiper/css'
 import 'swiper/css/effect-fade'
-
-const EASE = [0.32, 0.72, 0, 1] as const
-const HERO_HEIGHT = 'h-[calc(100dvh-var(--header-height))]'
-const AUTOPLAY_DELAY_MS = 5000
 
 export default function HeroBanner({ data }: { data: IHomepageBannerSlide[] }) {
   const swiperRef = useRef<SwiperType | null>(null)
@@ -145,116 +144,21 @@ export default function HeroBanner({ data }: { data: IHomepageBannerSlide[] }) {
         )}
       >
         <div className='pointer-events-auto max-w-full overflow-hidden'>
-          {reduceMotion ? (
-            <div>
-              <p className='mb-[0.65rem] font-sans text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'>
-                {active?.subtitle}
-              </p>
-              <h2 className='font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[2.25rem]'>
-                {active?.title}
-              </h2>
-            </div>
-          ) : (
-            <AnimatePresence
-              mode='wait'
-              custom={direction}
-            >
-              <motion.div
-                key={activeIndex}
-                custom={direction}
-                initial='enter'
-                animate='center'
-                exit='exit'
-                variants={{
-                  enter: (dir: 1 | -1) => ({
-                    opacity: 0,
-                    y: 28,
-                    x: dir * -20,
-                    filter: 'blur(14px)',
-                  }),
-                  center: {
-                    opacity: 1,
-                    y: 0,
-                    x: 0,
-                    filter: 'blur(0px)',
-                    transition: {
-                      duration: 0.7,
-                      ease: EASE,
-                      staggerChildren: 0.1,
-                      delayChildren: 0.12,
-                    },
-                  },
-                  exit: (dir: 1 | -1) => ({
-                    opacity: 0,
-                    y: -18,
-                    x: dir * 16,
-                    filter: 'blur(10px)',
-                    transition: { duration: 0.4, ease: EASE },
-                  }),
-                }}
-              >
-                <motion.p
-                  variants={{
-                    enter: { opacity: 0, y: 12, filter: 'blur(8px)' },
-                    center: {
-                      opacity: 1,
-                      y: 0,
-                      filter: 'blur(0px)',
-                      transition: { duration: 0.5, ease: EASE },
-                    },
-                    exit: { opacity: 0, filter: 'blur(6px)' },
-                  }}
-                  className='mb-[0.65rem] font-sans text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'
-                >
-                  {active?.subtitle}
-                </motion.p>
-                <motion.h2
-                  variants={{
-                    enter: { opacity: 0, y: 22, filter: 'blur(12px)' },
-                    center: {
-                      opacity: 1,
-                      y: 0,
-                      filter: 'blur(0px)',
-                      transition: { duration: 0.65, ease: EASE },
-                    },
-                    exit: { opacity: 0, y: -10, filter: 'blur(8px)' },
-                  }}
-                  className='font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[2.25rem]'
-                >
-                  {active?.title}
-                </motion.h2>
-              </motion.div>
-            </AnimatePresence>
-          )}
+          <HeroCopy
+            slide={active}
+            activeIndex={activeIndex}
+            direction={direction}
+            reduceMotion={reduceMotion}
+          />
         </div>
       </Container>
 
-      {Array.isArray(data) && data.length > 1 ? (
-        <div className='pointer-events-none absolute inset-x-0 bottom-[1.5rem] z-20 xsm:bottom-[1rem]'>
-          <Container className='pointer-events-auto flex items-center justify-end gap-[0.45rem]'>
-            {Array.isArray(data) &&
-              data.length > 0 &&
-              data?.map((_, index) => (
-                <button
-                  key={index}
-                  type='button'
-                  aria-label={`Chuyển tới slide ${index + 1}`}
-                  aria-current={index === activeIndex}
-                  onClick={() => {
-                    setDirection(index > activeIndex ? 1 : -1)
-                    swiperRef.current?.slideToLoop(index)
-                  }}
-                  className={cn(
-                    'h-[0.16rem] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
-                    index === activeIndex
-                      ? 'w-[2.25rem] bg-brand-moss'
-                      : 'w-[0.85rem] bg-white/35 hover:bg-white/60',
-                  )}
-                />
-              ))}
-          </Container>
-        </div>
-      ) : null}
+      <SlideIndicators
+        slides={data}
+        activeIndex={activeIndex}
+        swiperRef={swiperRef}
+        onSelect={(index) => setDirection(index > activeIndex ? 1 : -1)}
+      />
     </section>
   )
 }

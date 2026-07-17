@@ -1,10 +1,14 @@
+import { networkInterfaces } from 'os'
+
 import bundleAnalyzer from '@next/bundle-analyzer'
 import { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
+import ENV from '@/configs/env'
+
 const withNextIntl = createNextIntlPlugin()
 const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: ENV.ANALYZE === 'true',
 })
 
 function shouldAllowLocalIP(): boolean {
@@ -16,7 +20,27 @@ function shouldAllowLocalIP(): boolean {
   return /:\/\/(localhost|127\.0\.0\.1)(:\d+)?|\.local(:\d+)?/i.test(cms)
 }
 
+/** LAN IPs so phone/tablet can load /_next JS during `next dev`. */
+function getLanDevOrigins(): string[] {
+  const hosts = new Set<string>()
+
+  for (const nets of Object.values(networkInterfaces())) {
+    for (const net of nets ?? []) {
+      if (net.family !== 'IPv4' || net.internal) continue
+      hosts.add(net.address)
+    }
+  }
+
+  for (const origin of process.env.ALLOWED_DEV_ORIGINS?.split(',') ?? []) {
+    const value = origin.trim()
+    if (value) hosts.add(value)
+  }
+
+  return [...hosts]
+}
+
 const nextConfig: NextConfig = {
+  allowedDevOrigins: getLanDevOrigins(),
   images: {
     formats: ['image/webp'],
     minimumCacheTTL: 2678400,

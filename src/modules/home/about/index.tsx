@@ -1,39 +1,11 @@
-import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 
+import { ArrowLink } from '@/components/shared/arrow-link'
 import { Reveal } from '@/components/shared/reveal'
-import { Link } from '@/i18n/navigation'
 import { IHomepageAbout } from '@/interfaces/homepage.interface'
 import Container from '@/layouts/container'
 import { cn } from '@/lib/utils'
-
-function TextLink({
-  href,
-  children,
-  className,
-}: {
-  href: string
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        'group/link inline-flex items-center gap-[0.35rem] font-sans text-[0.875rem] tracking-wide text-brand-ink',
-        'underline decoration-brand-ink/35 underline-offset-[0.28rem]',
-        'transition-colors duration-300 hover:decoration-brand-ink',
-        className,
-      )}
-    >
-      {children}
-      <ArrowUpRight
-        className='size-[0.95rem] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover/link:translate-x-[0.1rem] group-hover/link:-translate-y-[0.1rem]'
-        strokeWidth={1.5}
-      />
-    </Link>
-  )
-}
+import { AboutDetails } from '@/modules/home/about/components/about-details'
 
 export default function AboutIntro({ data }: { data: IHomepageAbout }) {
   return (
@@ -52,12 +24,13 @@ export default function AboutIntro({ data }: { data: IHomepageAbout }) {
           >
             {data?.title}
           </h2>
-          <TextLink
+          <ArrowLink
             href={data?.link?.url}
+            variant='ink'
             className='mb-[0.35rem] shrink-0 xsm:mb-[0.15rem]'
           >
             {data?.link?.title}
-          </TextLink>
+          </ArrowLink>
         </Reveal>
 
         <div
@@ -85,20 +58,7 @@ export default function AboutIntro({ data }: { data: IHomepageAbout }) {
               />
             </div>
 
-            <div className='mt-[1.75rem] grid grid-cols-2 gap-[1.5rem] xsm:grid-cols-1 xsm:gap-[1.25rem]'>
-              {Array.isArray(data?.detail) &&
-                data?.detail.length > 0 &&
-                data?.detail?.map((item) => (
-                  <div key={item?.title}>
-                    <h4 className='font-sans text-[0.8rem] font-semibold uppercase tracking-[0.1em] text-brand-moss'>
-                      {item?.title}
-                    </h4>
-                    <p className='mt-[0.55rem] font-sans text-[0.875rem] leading-relaxed text-brand-ink/70'>
-                      {item?.desc}
-                    </p>
-                  </div>
-                ))}
-            </div>
+            <AboutDetails details={data?.detail} />
           </Reveal>
 
           <Reveal

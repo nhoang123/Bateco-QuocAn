@@ -1,44 +1,22 @@
 'use client'
 
-import Image from 'next/image'
-
 import { InfiniteSlider } from '@/components/shared/infinite-slider'
 import { Reveal } from '@/components/shared/reveal'
+import useIsMobile from '@/hooks/useIsMobile'
 import { IHomepagePartner } from '@/interfaces/homepage.interface'
 import Container from '@/layouts/container'
-import { cn } from '@/lib/utils'
-
-function PartnerMark({ partner }: { partner: string }) {
-  return (
-    <div
-      className={cn(
-        'group/mark flex h-auto w-[8rem] shrink-0 items-center justify-center',
-        'xsm:h-[3.75rem] xsm:w-[9rem]',
-      )}
-    >
-      <Image
-        src={partner}
-        alt={partner}
-        width={168}
-        height={56}
-        className={cn(
-          'h-auto w-[8rem] object-contain xsm:max-h-[2.1rem]',
-          'grayscale opacity-55 transition-[filter,opacity] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]',
-          'group-hover/mark:grayscale-0 group-hover/mark:opacity-100',
-        )}
-      />
-    </div>
-  )
-}
+import { PartnerMark } from '@/modules/home/partners/components/partner-mark'
 
 export default function Partners({ data }: { data: IHomepagePartner }) {
+  const isMobile = useIsMobile()
+
   return (
     <section
       className='relative overflow-hidden bg-[#e7ebe8] text-brand-ink'
       aria-labelledby='partners-heading'
     >
-      <Container className='relative pt-[3rem] xsm:pt-[2.25rem]'>
-        <Reveal className='mb-[1.35rem] flex items-end justify-between gap-[1.5rem] xsm:mb-[1rem] xsm:flex-col xsm:items-start xsm:gap-[0.75rem]'>
+      <Container className='relative pt-[3rem] xsm:pt-[3rem]'>
+        <Reveal className='mb-[1.35rem] flex items-end justify-between gap-[1.5rem] xsm:mb-[1.15rem] xsm:flex-col xsm:items-start xsm:gap-[0.85rem]'>
           <div>
             <p className='mb-[0.4rem] font-sans text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'>
               {data?.subtitle}
@@ -71,7 +49,7 @@ export default function Partners({ data }: { data: IHomepagePartner }) {
         />
 
         <InfiniteSlider
-          gap={160}
+          gap={isMobile ? 0 : 160}
           speed={90}
           speedOnHover={40}
         >
