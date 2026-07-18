@@ -16,10 +16,10 @@ export function HeroCopy({ slide, activeIndex, direction, reduceMotion }: HeroCo
   if (reduceMotion) {
     return (
       <div>
-        <p className='mb-[0.65rem] font-sans text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'>
+        <p className='mb-[0.65rem] font-sans text-[0.75rem] xsm:text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'>
           {slide?.subtitle}
         </p>
-        <h2 className='line-clamp-2 font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[2.25rem]'>
+        <h2 className='line-clamp-2 font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[1.5rem]'>
           {slide?.title}
         </h2>
       </div>
@@ -76,7 +76,7 @@ export function HeroCopy({ slide, activeIndex, direction, reduceMotion }: HeroCo
             },
             exit: { opacity: 0, filter: 'blur(6px)' },
           }}
-          className='mb-[0.65rem] font-sans text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'
+          className='mb-[0.65rem] font-sans text-[0.75rem] xsm:text-[0.5rem] font-semibold uppercase tracking-[0.18em] text-brand-moss'
         >
           {slide?.subtitle}
         </motion.p>
@@ -91,7 +91,7 @@ export function HeroCopy({ slide, activeIndex, direction, reduceMotion }: HeroCo
             },
             exit: { opacity: 0, y: -10, filter: 'blur(8px)' },
           }}
-          className='line-clamp-2 font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[2.25rem]'
+          className='line-clamp-2 font-display text-[3.25rem] font-semibold uppercase leading-[1.3] tracking-wide text-white xsm:text-[1.5rem]'
         >
           {slide?.title}
         </motion.h2>

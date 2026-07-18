@@ -1,11 +1,10 @@
-import HomepageModule from '@/modules/home'
+import AboutModule from '@/modules/about'
+import homepageService from '@/services/homepage'
 
-export const dynamicParams = false
-
-export function generateStaticParams() {
-  return [{ locale: 'vi' }, { locale: 'en' }]
+const AboutPage = async ({ params }: { params: Promise<{ locale: string }> }) => {
+  const { locale } = await params
+  const acfData = await homepageService.getAcfData(locale)
+  return <AboutModule areasOfOperation={acfData?.acf?.areas_of_operation} />
 }
 
-export default function HomePage() {
-  return <HomepageModule />
-}
+export default AboutPage

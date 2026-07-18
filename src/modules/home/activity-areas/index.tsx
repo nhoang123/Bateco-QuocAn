@@ -10,8 +10,9 @@ import { AREA_ORDER } from '@/modules/home/activity-areas/lib/constants'
 export default function ActivityAreas({ data }: { data: IHomepageAreasOfOperation }) {
   return (
     <section
+      id='activity-areas-heading'
       className='relative overflow-hidden border-t border-white/[0.08] bg-brand-ink'
-      aria-labelledby='activity-areas-heading'
+      aria-labelledby='activity-areas-title'
     >
       <SectionBackground />
 
@@ -21,7 +22,7 @@ export default function ActivityAreas({ data }: { data: IHomepageAreasOfOperatio
           y={20}
         >
           <h2
-            id='activity-areas-heading'
+            id='activity-areas-title'
             className='mb-[1.5rem] font-display text-[2rem] font-semibold uppercase tracking-wide text-white xsm:mb-[1.1rem] xsm:text-[1.5rem] xsm:px-4'
           >
             {data?.title}

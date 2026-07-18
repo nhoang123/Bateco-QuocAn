@@ -24,7 +24,10 @@ export default function Footer({ data }: FooterProps) {
   const button2 = data.button_2
 
   return (
-    <footer className='relative overflow-hidden border-t border-brand-ink/10 bg-[#e7ebe8] text-brand-ink'>
+    <footer
+      id='site-footer'
+      className='relative overflow-hidden border-t border-brand-ink/10 bg-[#e7ebe8] text-brand-ink'
+    >
       <Container className='relative z-[1] pt-[3.75rem] xsm:pt-[2.75rem]'>
         <div
           className={cn(
